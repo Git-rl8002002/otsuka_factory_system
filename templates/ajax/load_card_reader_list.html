@@ -1,0 +1,50 @@
+<div class="row">
+    
+    <div class="col-md-6 my-1">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="text-primary"><i class="bi bi-chat-left-text"></i> {{ dep }} 正職人員清單</h4>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-action text-center">
+                        應到 {{ card_reader_dep_total_res }} , 
+                        實到 {{ card_reader_dep_real_total_res }}
+                    </li>
+
+                    <div class="row">
+                        <div class="col-md-6 my-3">
+                            {% for val in card_reader_dep_res %}
+                                <li class="list-group-item list-group-item-action" id="{{ val[0] }}" onclick="load_card_reader_list_detail(id)"><i class="bi bi-arrow-right-short"></i> {{ val[0] }}</li>    
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6 my-3">
+                            {% for val2 in card_reader_check_status_res %}
+                                <li class="list-group-item list-group-item-action" id="{{ val2[0] }}" onclick="load_card_reader_list_detail(id)"><i class="bi bi-arrow-right-short"></i> {{ val2[0] }}</li>    
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 my-1">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="text-primary"><i class="bi bi-chat-left-text"></i> {{ dep }} 派遣人員清單</h4>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for val in card_reader_dep_res2 %}
+                        <li class="list-group-item list-group-item-action" id="{{ val[0] }}" onclick="load_card_reader_list_detail(id)"><i class="bi bi-arrow-right-short"></i> {{ val[0] }}</li>
+                    {% endfor %}    
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

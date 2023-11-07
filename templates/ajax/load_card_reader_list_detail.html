@@ -1,0 +1,13 @@
+<div class="card">
+    <div class="card-header">
+        <h4 class="text-primary"><i class="bi bi-chat-left-text"></i> {{ e_name }} 刷卡詳細清單</h4>
+    </div>
+    <div class="card-body">
+        <ul class="list-group">
+            {% for val in card_reader_dep_res %}
+            <li class="list-group-item list-group-item-action"><i class="bi bi-arrow-right-short"></i> {{ val[2] }} - {{ val[1] }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
