@@ -57,7 +57,7 @@ class device_list:
                 folder_path = 'C:/Jason_python/otsuka_factory_work_time_record/device_list'
                 
             elif sys.platform.startswith('darwin'):
-                folder_path = '/Users/jason_hungotsuka.com.tw/otsuka/git/otsuka_factory_work_time_record/device_list'
+                folder_path = '/Users/jason_hungotsuka.com.tw/Documents/git/otsuka_factory_system/device_list'
                 #folder_path = 'F:/otsuka/Git/otsuka_factory_work_time_record/device_list' 
 
             files = os.listdir(folder_path)
@@ -72,7 +72,7 @@ class device_list:
                 elif sys.platform.startswith('darwin'):
                     # 開發機
                     #csv_file = "F:/otsuka/Git/otsuka_factory_work_time_record/device_list/" + latest_file
-                    csv_file = '/Users/jason_hungotsuka.com.tw/otsuka/git/otsuka_factory_work_time_record/device_list/' + latest_file
+                    csv_file = '/Users/jason_hungotsuka.com.tw/Documents/git/otsuka_factory_system/device_list/' + latest_file
                 
                 with open(csv_file , 'r' , encoding='utf-8') as device_list_csv:
                     csv_reader = csv.reader(device_list_csv)
