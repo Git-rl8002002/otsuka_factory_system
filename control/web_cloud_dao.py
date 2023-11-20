@@ -8,11 +8,19 @@
 
 import pymysql , logging , time , re , requests , json , calendar , csv , json , openpyxl , pyodbc , sys
 import matplotlib.pyplot as plt
+import mplcursors
 from io import BytesIO
 import base64
 from fpdf import *
 from control.config import *
 from openpyxl.styles import Font , PatternFill , Alignment
+
+
+import io
+import base64
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 ########################################################################################################################################
 #
@@ -27,6 +35,13 @@ class web_cloud_dao:
     log_format = "%(asctime)s %(message)s"
     logging.basicConfig(format=log_format , level=logging.INFO , datefmt="%Y-%m-%d %H:%M:%S")
     #logging.disable(logging.INFO)
+
+
+    def generate_plot():
+        # 创建一个简单的 Matplotlib 图表
+        fig, ax = Figure(), FigureCanvas(Figure())
+        ax.plot([1, 2, 3, 4, 5], [2, 4, 6, 8, 10])
+        return fig
 
     ##########################
     # show_day_money_detail
@@ -1526,6 +1541,50 @@ class web_cloud_dao:
         finally:
             self.__disconnect__()
 
+    ######################################
+    # show_factory_monitor_position_img
+    ######################################
+    def show_factory_monitor_position_img(self):
+        
+        self.__connect4__()
+        try:
+            # record time
+            now_month = time.strftime("%Y_%m" , time.localtime()) 
+            
+            # all device position
+            d_sql = f"select distinct b.d_name , b.d_c_name from {now_month} a left join monitor_device b on a.s_kind=b.d_name where a.s_kind != 'I6-1' and a.s_kind !='I6-2' order by b.d_name asc"
+            self.curr.execute(d_sql)
+            d_res = self.curr.fetchall() 
+
+            x = [row[0] for row in d_res]  # x轴数据
+            y1 = [row[1] for row in d_res]  # 第一条线的y轴数据
+            y2 = [row[2] for row in d_res]  # 第二条线的y轴数据
+
+            # 生成多条线图
+            plt.plot(x, y1, label='Line 1')
+            plt.plot(x, y2, label='Line 2')
+            plt.xlabel('X Label')
+            plt.ylabel('Y Label')
+            plt.title('MySQL Data Multiple Line Chart')
+            plt.legend()
+
+            # 保存图像到内存中
+            img = io.BytesIO()
+            plt.savefig(img, format='png')
+            img.seek(0)
+
+            # 将图像转换为base64编码
+            plot_url = base64.b64encode(img.getvalue()).decode()
+
+
+            return plot_url
+
+        except Exception as e:
+            logging.error('< Error > show_factory_monitor_position_img : ' + str(e))
+
+        finally:
+            self.__disconnect4__()
+
     ##################################
     # show_factory_monitor_position
     ##################################
@@ -1574,6 +1633,810 @@ class web_cloud_dao:
         finally:
             self.__disconnect4__()
 
+    #########################################
+    # show_factory_monitor_detail_rh_img
+    #########################################
+    def show_factory_monitor_detail_rh_img(self , s_kind):
+        
+        self.__connect4__()
+        
+        try:
+            ### r_time
+            r_date = time.strftime("%Y_%m" , time.localtime())
+            r_time = time.strftime("%Y-%m-%d %H:%M:%S" , time.localtime())
+
+            # all device user 
+            d_sql = f"select r_time , s_content , s_protocol , val_1 , val_2 , val_3 , val_4 , val_5   from {r_date} where s_kind='{s_kind}' order by r_time desc limit 0,40"
+            self.curr.execute(d_sql)
+            d_res = self.curr.fetchall() 
+
+            x  = [row[0] for row in d_res]  # x轴数据
+            y1 = [float(row[4]) for row in d_res]  # 第一条线的y轴数据
+            
+            # 生成多条线图
+            fig  = Figure()
+            axis = fig.add_subplot(1, 1, 1)
+            axis.plot(x, y1 , label='RH' ,  marker='o', markersize=4)
+            axis.set_title('RH')
+            axis.set_xlabel('date time')
+            axis.set_ylabel('value (%)')
+            
+            axis.legend()
+            fig.tight_layout()
+    
+            img = io.BytesIO()
+            FigureCanvas(fig).print_png(img)
+            img.seek(0)
+
+            # Convert the image to base64 for embedding in HTML
+            img_data = base64.b64encode(img.getvalue()).decode('utf-8')
+
+            return img_data
+
+        except Exception as e:
+            logging.error('< Error > show_factory_monitor_detail_rh_img : ' + str(e))
+
+        finally:
+            self.__disconnect4__()
+
+    #########################################
+    # show_factory_monitor_detail_rh_val
+    #########################################
+    def show_factory_monitor_detail_rh_val(self , s_kind):
+        
+        self.__connect4__()
+        
+        try:
+            ### r_time
+            r_date = time.strftime("%Y_%m" , time.localtime())
+            r_time = time.strftime("%Y-%m-%d %H:%M:%S" , time.localtime())
+
+            # all device user 
+            d_sql = f"select min(val_2) , max(val_2) , ROUND(AVG(val_2),2) from {r_date} where s_kind='{s_kind}' order by r_time desc limit 0,40"
+            self.curr.execute(d_sql)
+            d_res = self.curr.fetchall() 
+
+            return d_res
+
+        except Exception as e:
+            logging.error('< Error > show_factory_monitor_detail_rh_val : ' + str(e))
+
+        finally:
+            self.__disconnect4__()
+
+    #########################################
+    # show_factory_monitor_detail_temp_val
+    #########################################
+    def show_factory_monitor_detail_temp_val(self , s_kind):
+        
+        self.__connect4__()
+        
+        try:
+            ### r_time
+            r_date = time.strftime("%Y_%m" , time.localtime())
+            r_time = time.strftime("%Y-%m-%d %H:%M:%S" , time.localtime())
+
+            # all device user 
+            d_sql = f"select min(val_1) , max(val_1) , ROUND(AVG(val_1),2) from {r_date} where s_kind='{s_kind}' order by r_time desc limit 0,40"
+            self.curr.execute(d_sql)
+            d_res = self.curr.fetchall() 
+
+            return d_res
+
+        except Exception as e:
+            logging.error('< Error > show_factory_monitor_detail_temp_val : ' + str(e))
+
+        finally:
+            self.__disconnect4__()
+
+    #############################################
+    # show_factory_monitor_detail_rh_pie_img
+    #############################################
+    def show_factory_monitor_detail_rh_pie_img(self , s_kind):
+        
+        self.__connect4__()
+        
+        try:
+            ### r_time
+            r_date = time.strftime("%Y_%m" , time.localtime())
+            r_time = time.strftime("%Y-%m-%d %H:%M:%S" , time.localtime())
+
+            # all device user 
+            d_sql = f"select val_2 , count(*) from {r_date} where s_kind='{s_kind}' group by val_2 order by val_2 desc limit 0,8"
+            self.curr.execute(d_sql)
+            d_res = self.curr.fetchall() 
+
+            val = [row[0] for row in d_res]  # x轴数据
+            count = [float(row[1]) for row in d_res]  # 第一条线的y轴数据
+            
+            # 生成多条线图
+            fig  = Figure()
+            axis = fig.add_subplot(1, 1, 1)
+            # 创建圆饼图
+            
+            axis.pie(count, labels=val, autopct='%1.1f%%', startangle=90)
+            axis.axis('equal')  # 保证饼图是圆形的
+            axis.set_title('RH')
+
+            axis.legend()
+            fig.tight_layout()
+    
+            img = io.BytesIO()
+            FigureCanvas(fig).print_png(img)
+            img.seek(0)
+
+            # Convert the image to base64 for embedding in HTML
+            img_data = base64.b64encode(img.getvalue()).decode('utf-8')
+
+            return img_data
+
+        except Exception as e:
+            logging.error('< Error > show_factory_monitor_detail_rh_pie_img : ' + str(e))
+
+        finally:
+            self.__disconnect4__()
+
+    #############################################
+    # show_factory_monitor_detail_temp_pie_img
+    #############################################
+    def show_factory_monitor_detail_temp_pie_img(self , s_kind):
+        
+        self.__connect4__()
+        
+        try:
+            ### r_time
+            r_date = time.strftime("%Y_%m" , time.localtime())
+            r_time = time.strftime("%Y-%m-%d %H:%M:%S" , time.localtime())
+
+            # all device user 
+            d_sql = f"select val_1 , count(*) from {r_date} where s_kind='{s_kind}' group by val_1 order by val_1 desc limit 0,8"
+            self.curr.execute(d_sql)
+            d_res = self.curr.fetchall() 
+
+            val = [row[0] for row in d_res]  # x轴数据
+            count = [float(row[1]) for row in d_res]  # 第一条线的y轴数据
+            
+            # 生成多条线图
+            fig  = Figure()
+            axis = fig.add_subplot(1, 1, 1)
+            # 创建圆饼图
+            
+            axis.pie(count, labels=val, autopct='%1.1f%%', startangle=90)
+            axis.axis('equal')  # 保证饼图是圆形的
+            axis.set_title('Temp')
+
+            axis.legend()
+            fig.tight_layout()
+    
+            img = io.BytesIO()
+            FigureCanvas(fig).print_png(img)
+            img.seek(0)
+
+            # Convert the image to base64 for embedding in HTML
+            img_data = base64.b64encode(img.getvalue()).decode('utf-8')
+
+            return img_data
+
+        except Exception as e:
+            logging.error('< Error > show_factory_monitor_detail_temp_pie_img : ' + str(e))
+
+        finally:
+            self.__disconnect4__()
+
+    #########################################
+    # show_factory_monitor_detail_temp_img
+    #########################################
+    def show_factory_monitor_detail_temp_img(self , s_kind):
+        
+        self.__connect4__()
+        
+        try:
+            ### r_time
+            r_date = time.strftime("%Y_%m" , time.localtime())
+            r_time = time.strftime("%Y-%m-%d %H:%M:%S" , time.localtime())
+
+            # all device user 
+            d_sql = f"select r_time , s_content , s_protocol , val_1 , val_2 , val_3 , val_4 , val_5   from {r_date} where s_kind='{s_kind}' order by r_time desc limit 0,40"
+            self.curr.execute(d_sql)
+            d_res = self.curr.fetchall() 
+
+            x  = [row[0] for row in d_res]  # x轴数据
+            y1 = [float(row[3]) for row in d_res]  # 第一条线的y轴数据
+            
+            # 生成多条线图
+            fig  = Figure()
+            axis = fig.add_subplot(1, 1, 1)
+            axis.plot(x, y1 , label='Temp' ,  marker='o', markersize=4)
+            axis.set_title('Temp')
+            axis.set_xlabel('date time')
+            axis.set_ylabel('value (°C)')
+
+            # 启用鼠标悬停提示显示数值
+            mplcursors.cursor(fig).connect("add", lambda axis: axis.annotation.set_text(f"{axis.target[0]:.2f},{axis.target[1]:.2f}"))
+            # 添加提示文本（手动方式）
+            #for i, txt in enumerate(y1):
+            #    axis.annotate(f'{txt:.2f}', (x[i], y1[i]), textcoords="offset points", xytext=(0,10), ha='center')
+
+            axis.legend()
+            fig.tight_layout()
+    
+            img = io.BytesIO()
+            FigureCanvas(fig).print_png(img)
+            img.seek(0)
+
+            # Convert the image to base64 for embedding in HTML
+            img_data = base64.b64encode(img.getvalue()).decode('utf-8')
+
+            return img_data
+
+        except Exception as e:
+            logging.error('< Error > show_factory_monitor_detail_temp_img : ' + str(e))
+
+        finally:
+            self.__disconnect4__()
+
+    ##############################################
+    # show_factory_monitor_detail_temp_rh_img_2
+    ##############################################
+    def show_factory_monitor_detail_temp_rh_img_2(self , s_kind):
+        
+        self.__connect4__()
+        
+        try:
+            ### r_time
+            r_date = time.strftime("%Y_%m" , time.localtime())
+            r_time = time.strftime("%Y-%m-%d %H:%M:%S" , time.localtime())
+
+            # all device user 
+            d_sql = f"select r_time , s_content , s_protocol , val_1 , val_2 , val_3 , val_4 , val_5   from {r_date} where s_kind='{s_kind}' order by r_time desc limit 0,40"
+            self.curr.execute(d_sql)
+            d_res = self.curr.fetchall() 
+
+            x  = [row[0] for row in d_res]  # x轴数据
+            y1 = [float(row[4]) for row in d_res]  # 第一条线的y轴数据
+            
+            # 生成多条线图
+            fig  = Figure()
+            axis = fig.add_subplot(1, 1, 1)
+            axis.plot(x, y1 , label='RH' ,  marker='o', markersize=4)
+            axis.set_title(s_kind + ' RH')
+            axis.set_xlabel('date time')
+            axis.set_ylabel('value (%)')
+
+            # 启用鼠标悬停提示显示数值
+            mplcursors.cursor(fig).connect("add", lambda axis: axis.annotation.set_text(f"{axis.target[0]:.2f},{axis.target[1]:.2f}"))
+            # 添加提示文本（手动方式）
+            #for i, txt in enumerate(y1):
+            #    axis.annotate(f'{txt:.2f}', (x[i], y1[i]), textcoords="offset points", xytext=(0,10), ha='center')
+            
+            axis.legend()
+            fig.tight_layout()
+    
+            img = io.BytesIO()
+            FigureCanvas(fig).print_png(img)
+            img.seek(0)
+
+            # Convert the image to base64 for embedding in HTML
+            img_data = base64.b64encode(img.getvalue()).decode('utf-8')
+
+            return img_data
+
+        except Exception as e:
+            logging.error('< Error > show_factory_monitor_detail_temp_rh_img_2 : ' + str(e))
+
+        finally:
+            self.__disconnect4__()
+
+    #########################################################
+    # show_factory_monitor_detail_warehouse_rh_img
+    #########################################################
+    def show_factory_monitor_detail_warehouse_rh_img(self):
+        
+        self.__connect4__()
+        
+        try:
+            ### r_time
+            r_date = time.strftime("%Y_%m" , time.localtime())
+            r_time = time.strftime("%Y-%m-%d %H:%M:%S" , time.localtime())
+            
+            ## S-1
+            s_1_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-1' order by r_time desc limit 0,40"
+            self.curr.execute(s_1_sql)
+            s_1_res = self.curr.fetchall() 
+            ### S-2
+            s_2_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-2' order by r_time desc limit 0,40"
+            self.curr.execute(s_2_sql)
+            s_2_res = self.curr.fetchall() 
+            ### S-3
+            s_3_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-3' order by r_time desc limit 0,40"
+            self.curr.execute(s_3_sql)
+            s_3_res = self.curr.fetchall() 
+            ### S-4
+            s_4_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-4' order by r_time desc limit 0,40"
+            self.curr.execute(s_4_sql)
+            s_4_res = self.curr.fetchall() 
+            ### S-5
+            s_5_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-5' order by r_time desc limit 0,40"
+            self.curr.execute(s_5_sql)
+            s_5_res = self.curr.fetchall() 
+            ### S-6
+            s_6_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-6' order by r_time desc limit 0,40"
+            self.curr.execute(s_6_sql)
+            s_6_res = self.curr.fetchall() 
+            ### S-7
+            s_7_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-7' order by r_time desc limit 0,40"
+            self.curr.execute(s_7_sql)
+            s_7_res = self.curr.fetchall() 
+            ### S-8
+            s_8_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-8' order by r_time desc limit 0,40"
+            self.curr.execute(s_8_sql)
+            s_8_res = self.curr.fetchall() 
+            ### S-9
+            s_9_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-9' order by r_time desc limit 0,40"
+            self.curr.execute(s_9_sql)
+            s_9_res = self.curr.fetchall() 
+            ### S-10
+            s_10_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-10' order by r_time desc limit 0,40"
+            self.curr.execute(s_10_sql)
+            s_10_res = self.curr.fetchall() 
+            ### S-14
+            s_14_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-14' order by r_time desc limit 0,40"
+            self.curr.execute(s_14_sql)
+            s_14_res = self.curr.fetchall() 
+            ### S-17
+            s_17_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-17' order by r_time desc limit 0,40"
+            self.curr.execute(s_17_sql)
+            s_17_res = self.curr.fetchall() 
+            ### S-18
+            s_18_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-18' order by r_time desc limit 0,40"
+            self.curr.execute(s_18_sql)
+            s_18_res = self.curr.fetchall() 
+
+            x  = [row[0] for row in s_1_res]  # x轴数据
+            y1 = [float(row[4]) for row in s_1_res]  # S-1
+            y2 = [float(row[4]) for row in s_2_res]  # S-2
+            y3 = [float(row[4]) for row in s_3_res]  # S-3
+            y4 = [float(row[4]) for row in s_4_res]  # S-4
+            y5 = [float(row[4]) for row in s_5_res]  # S-5
+            y6 = [float(row[4]) for row in s_6_res]  # S-6
+            y7 = [float(row[4]) for row in s_7_res]  # S-7
+            y8 = [float(row[4]) for row in s_8_res]  # S-8
+            y9 = [float(row[4]) for row in s_9_res]  # S-9
+            y10 = [float(row[4]) for row in s_10_res]  # S-10
+            y14 = [float(row[4]) for row in s_14_res]  # S-14
+            y17 = [float(row[4]) for row in s_17_res]  # S-17
+            y18 = [float(row[4]) for row in s_18_res]  # S-14
+            
+            # 生成多条线图
+            fig  = Figure()
+            axis = fig.add_subplot(1, 1, 1)
+            axis.plot(x, y1 , label='S-1')
+            axis.plot(x, y2 , label='S-2')
+            axis.plot(x, y3 , label='S-3')
+            axis.plot(x, y4 , label='S-4')
+            axis.plot(x, y5 , label='S-5')
+            axis.plot(x, y6 , label='S-6')
+            axis.plot(x, y7 , label='S-7')
+            axis.plot(x, y8 , label='S-8')
+            axis.plot(x, y9 , label='S-9')
+            axis.plot(x, y10 , label='S-10')
+            axis.plot(x, y14 , label='S-14')
+            axis.plot(x, y17 , label='S-17')
+            axis.plot(x, y18 , label='S-18')
+
+            axis.set_title('Warehouse Sensor RH')
+            axis.set_xlabel('date time')
+            axis.set_ylabel('value (%)')
+    
+            axis.legend()
+            fig.tight_layout()
+
+            img = io.BytesIO()
+            FigureCanvas(fig).print_png(img)
+            img.seek(0)
+
+            # Convert the image to base64 for embedding in HTML
+            img_data = base64.b64encode(img.getvalue()).decode('utf-8')
+
+            return img_data
+
+        except Exception as e:
+            logging.error('< Error > show_factory_monitor_detail_warehouse_rh_img : ' + str(e))
+
+        finally:
+            self.__disconnect4__()
+
+    #########################################################
+    # show_factory_monitor_detail_warehouse_temp_img
+    #########################################################
+    def show_factory_monitor_detail_warehouse_temp_img(self):
+        
+        self.__connect4__()
+        
+        try:
+            ### r_time
+            r_date = time.strftime("%Y_%m" , time.localtime())
+            r_time = time.strftime("%Y-%m-%d %H:%M:%S" , time.localtime())
+            
+            ## S-1
+            s_1_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-1' order by r_time desc limit 0,40"
+            self.curr.execute(s_1_sql)
+            s_1_res = self.curr.fetchall() 
+            ### S-2
+            s_2_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-2' order by r_time desc limit 0,40"
+            self.curr.execute(s_2_sql)
+            s_2_res = self.curr.fetchall() 
+            ### S-3
+            s_3_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-3' order by r_time desc limit 0,40"
+            self.curr.execute(s_3_sql)
+            s_3_res = self.curr.fetchall() 
+            ### S-4
+            s_4_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-4' order by r_time desc limit 0,40"
+            self.curr.execute(s_4_sql)
+            s_4_res = self.curr.fetchall() 
+            ### S-5
+            s_5_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-5' order by r_time desc limit 0,40"
+            self.curr.execute(s_5_sql)
+            s_5_res = self.curr.fetchall() 
+            ### S-6
+            s_6_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-6' order by r_time desc limit 0,40"
+            self.curr.execute(s_6_sql)
+            s_6_res = self.curr.fetchall() 
+            ### S-7
+            s_7_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-7' order by r_time desc limit 0,40"
+            self.curr.execute(s_7_sql)
+            s_7_res = self.curr.fetchall() 
+            ### S-8
+            s_8_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-8' order by r_time desc limit 0,40"
+            self.curr.execute(s_8_sql)
+            s_8_res = self.curr.fetchall() 
+            ### S-9
+            s_9_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-9' order by r_time desc limit 0,40"
+            self.curr.execute(s_9_sql)
+            s_9_res = self.curr.fetchall() 
+            ### S-10
+            s_10_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-10' order by r_time desc limit 0,40"
+            self.curr.execute(s_10_sql)
+            s_10_res = self.curr.fetchall() 
+            ### S-14
+            s_14_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-14' order by r_time desc limit 0,40"
+            self.curr.execute(s_14_sql)
+            s_14_res = self.curr.fetchall() 
+            ### S-17
+            s_17_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-17' order by r_time desc limit 0,40"
+            self.curr.execute(s_17_sql)
+            s_17_res = self.curr.fetchall() 
+            ### S-18
+            s_18_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-18' order by r_time desc limit 0,40"
+            self.curr.execute(s_18_sql)
+            s_18_res = self.curr.fetchall() 
+
+            x  = [row[0] for row in s_1_res]  # x轴数据
+            y1 = [float(row[3]) for row in s_1_res]  # S-1
+            y2 = [float(row[3]) for row in s_2_res]  # S-2
+            y3 = [float(row[3]) for row in s_3_res]  # S-3
+            y4 = [float(row[3]) for row in s_4_res]  # S-4
+            y5 = [float(row[3]) for row in s_5_res]  # S-5
+            y6 = [float(row[3]) for row in s_6_res]  # S-6
+            y7 = [float(row[3]) for row in s_7_res]  # S-7
+            y8 = [float(row[3]) for row in s_8_res]  # S-8
+            y9 = [float(row[3]) for row in s_9_res]  # S-9
+            y10 = [float(row[3]) for row in s_10_res]  # S-10
+            y14 = [float(row[3]) for row in s_14_res]  # S-14
+            y17 = [float(row[3]) for row in s_17_res]  # S-17
+            y18 = [float(row[3]) for row in s_18_res]  # S-14
+            
+            # 生成多条线图
+            fig  = Figure()
+            axis = fig.add_subplot(1, 1, 1)
+            axis.plot(x, y1 , label='S-1')
+            axis.plot(x, y2 , label='S-2')
+            axis.plot(x, y3 , label='S-3')
+            axis.plot(x, y4 , label='S-4')
+            axis.plot(x, y5 , label='S-5')
+            axis.plot(x, y6 , label='S-6')
+            axis.plot(x, y7 , label='S-7')
+            axis.plot(x, y8 , label='S-8')
+            axis.plot(x, y9 , label='S-9')
+            axis.plot(x, y10 , label='S-10')
+            axis.plot(x, y14 , label='S-14')
+            axis.plot(x, y17 , label='S-17')
+            axis.plot(x, y18 , label='S-18')
+
+            axis.set_title('Warehouse Sensor Temp')
+            axis.set_xlabel('date time')
+            axis.set_ylabel('value (°C)')
+    
+            axis.legend()
+            fig.tight_layout()
+
+            img = io.BytesIO()
+            FigureCanvas(fig).print_png(img)
+            img.seek(0)
+
+            # Convert the image to base64 for embedding in HTML
+            img_data = base64.b64encode(img.getvalue()).decode('utf-8')
+
+            return img_data
+
+        except Exception as e:
+            logging.error('< Error > show_factory_monitor_detail_warehouse_temp_img : ' + str(e))
+
+        finally:
+            self.__disconnect4__()
+
+    #########################################################
+    # show_factory_monitor_detail_quality_control_rh_img
+    #########################################################
+    def show_factory_monitor_detail_quality_control_rh_img(self):
+        
+        self.__connect4__()
+        
+        try:
+            ### r_time
+            r_date = time.strftime("%Y_%m" , time.localtime())
+            r_time = time.strftime("%Y-%m-%d %H:%M:%S" , time.localtime())
+            
+            ## S-11-1
+            s_11_1_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-11-1' order by r_time desc limit 0,40"
+            self.curr.execute(s_11_1_sql)
+            s_11_1_res = self.curr.fetchall() 
+            ## S-11-2
+            s_11_2_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-11-2' order by r_time desc limit 0,40"
+            self.curr.execute(s_11_2_sql)
+            s_11_2_res = self.curr.fetchall() 
+            ### S-12
+            s_12_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-12' order by r_time desc limit 0,40"
+            self.curr.execute(s_12_sql)
+            s_12_res = self.curr.fetchall() 
+            ### S-13
+            s_13_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-13' order by r_time desc limit 0,40"
+            self.curr.execute(s_13_sql)
+            s_13_res = self.curr.fetchall() 
+            ### S-15-1
+            s_15_1_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-15-1' order by r_time desc limit 0,40"
+            self.curr.execute(s_15_1_sql)
+            s_15_1_res = self.curr.fetchall()
+            ### S-15-2
+            s_15_2_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-15-2' order by r_time desc limit 0,40"
+            self.curr.execute(s_15_2_sql)
+            s_15_2_res = self.curr.fetchall() 
+            ### S-15-3
+            s_15_3_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-15-3' order by r_time desc limit 0,40"
+            self.curr.execute(s_15_3_sql)
+            s_15_3_res = self.curr.fetchall() 
+            ### S-15-4
+            s_15_4_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-15-4' order by r_time desc limit 0,40"
+            self.curr.execute(s_15_4_sql)
+            s_15_4_res = self.curr.fetchall() 
+            ### S-15-5
+            s_15_5_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-15-5' order by r_time desc limit 0,40"
+            self.curr.execute(s_15_5_sql)
+            s_15_5_res = self.curr.fetchall() 
+            ### S-15-6
+            s_15_6_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-15-6' order by r_time desc limit 0,40"
+            self.curr.execute(s_15_6_sql)
+            s_15_6_res = self.curr.fetchall() 
+            ### S-16
+            s_16_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-16' order by r_time desc limit 0,40"
+            self.curr.execute(s_16_sql)
+            s_16_res = self.curr.fetchall() 
+            ### S-19
+            s_19_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-19' order by r_time desc limit 0,40"
+            self.curr.execute(s_19_sql)
+            s_19_res = self.curr.fetchall() 
+
+            x  = [row[0] for row in s_11_1_res]  # x轴数据
+            y11_1 = [float(row[4]) for row in s_11_1_res]  # S-11-1
+            y11_2 = [float(row[4]) for row in s_11_2_res]  # S-11-2
+            y12 = [float(row[4]) for row in s_12_res]  # S-12
+            y13 = [float(row[4]) for row in s_13_res]  # S-13
+            y15_1 = [float(row[4]) for row in s_15_1_res]  # S-15-1
+            y15_2 = [float(row[4]) for row in s_15_2_res]  # S-15-2
+            y15_3 = [float(row[4]) for row in s_15_3_res]  # S-15-3
+            y15_4 = [float(row[4]) for row in s_15_4_res]  # S-15-4
+            y15_5 = [float(row[4]) for row in s_15_5_res]  # S-15-5
+            y15_6 = [float(row[4]) for row in s_15_6_res]  # S-15-6
+            y16 = [float(row[4]) for row in s_16_res]  # S-16
+            y19 = [float(row[4]) for row in s_19_res]  # S-19
+            
+            # 生成多条线图
+            fig  = Figure()
+            axis = fig.add_subplot(1, 1, 1)
+            axis.plot(x, y11_1 , label='S-11-1')
+            axis.plot(x, y11_2 , label='S-11-2')
+            axis.plot(x, y12 , label='S-12')
+            axis.plot(x, y13 , label='S-13')
+            axis.plot(x, y15_1 , label='S-15-1')
+            axis.plot(x, y15_2 , label='S-15-2')
+            axis.plot(x, y15_3 , label='S-15-3')
+            axis.plot(x, y15_4 , label='S-15-4')
+            axis.plot(x, y15_5 , label='S-15-5')
+            axis.plot(x, y15_6 , label='S-15-6')
+            axis.plot(x, y16 , label='S-16')
+            axis.plot(x, y19 , label='S-19')
+
+            axis.set_title('Quality Control Sensor RH')
+            axis.set_xlabel('date time')
+            axis.set_ylabel('value (%)')
+    
+            axis.legend()
+            fig.tight_layout()
+
+            img = io.BytesIO()
+            FigureCanvas(fig).print_png(img)
+            img.seek(0)
+
+            # Convert the image to base64 for embedding in HTML
+            img_data = base64.b64encode(img.getvalue()).decode('utf-8')
+
+            return img_data
+
+        except Exception as e:
+            logging.error('< Error > show_factory_monitor_detail_quality_control_rh_img : ' + str(e))
+
+        finally:
+            self.__disconnect4__()
+
+    #########################################################
+    # show_factory_monitor_detail_quality_control_temp_img
+    #########################################################
+    def show_factory_monitor_detail_quality_control_temp_img(self):
+        
+        self.__connect4__()
+        
+        try:
+            ### r_time
+            r_date = time.strftime("%Y_%m" , time.localtime())
+            r_time = time.strftime("%Y-%m-%d %H:%M:%S" , time.localtime())
+            
+            ## S-11-1
+            s_11_1_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-11-1' order by r_time desc limit 0,40"
+            self.curr.execute(s_11_1_sql)
+            s_11_1_res = self.curr.fetchall() 
+            ## S-11-2
+            s_11_2_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-11-2' order by r_time desc limit 0,40"
+            self.curr.execute(s_11_2_sql)
+            s_11_2_res = self.curr.fetchall() 
+            ### S-12
+            s_12_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-12' order by r_time desc limit 0,40"
+            self.curr.execute(s_12_sql)
+            s_12_res = self.curr.fetchall() 
+            ### S-13
+            s_13_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-13' order by r_time desc limit 0,40"
+            self.curr.execute(s_13_sql)
+            s_13_res = self.curr.fetchall() 
+            ### S-15-1
+            s_15_1_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-15-1' order by r_time desc limit 0,40"
+            self.curr.execute(s_15_1_sql)
+            s_15_1_res = self.curr.fetchall()
+            ### S-15-2
+            s_15_2_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-15-2' order by r_time desc limit 0,40"
+            self.curr.execute(s_15_2_sql)
+            s_15_2_res = self.curr.fetchall() 
+            ### S-15-3
+            s_15_3_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-15-3' order by r_time desc limit 0,40"
+            self.curr.execute(s_15_3_sql)
+            s_15_3_res = self.curr.fetchall() 
+            ### S-15-4
+            s_15_4_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-15-4' order by r_time desc limit 0,40"
+            self.curr.execute(s_15_4_sql)
+            s_15_4_res = self.curr.fetchall() 
+            ### S-15-5
+            s_15_5_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-15-5' order by r_time desc limit 0,40"
+            self.curr.execute(s_15_5_sql)
+            s_15_5_res = self.curr.fetchall() 
+            ### S-15-6
+            s_15_6_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-15-6' order by r_time desc limit 0,40"
+            self.curr.execute(s_15_6_sql)
+            s_15_6_res = self.curr.fetchall() 
+            ### S-16
+            s_16_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-16' order by r_time desc limit 0,40"
+            self.curr.execute(s_16_sql)
+            s_16_res = self.curr.fetchall() 
+            ### S-19
+            s_19_sql = f"select r_time , s_content , s_protocol , val_1 , val_2  from {r_date} where s_kind='S-19' order by r_time desc limit 0,40"
+            self.curr.execute(s_19_sql)
+            s_19_res = self.curr.fetchall() 
+
+            x  = [row[0] for row in s_11_1_res]  # x轴数据
+            y11_1 = [float(row[3]) for row in s_11_1_res]  # S-11-1
+            y11_2 = [float(row[3]) for row in s_11_2_res]  # S-11-2
+            y12 = [float(row[3]) for row in s_12_res]  # S-12
+            y13 = [float(row[3]) for row in s_13_res]  # S-13
+            y15_1 = [float(row[3]) for row in s_15_1_res]  # S-15-1
+            y15_2 = [float(row[3]) for row in s_15_2_res]  # S-15-2
+            y15_3 = [float(row[3]) for row in s_15_3_res]  # S-15-3
+            y15_4 = [float(row[3]) for row in s_15_4_res]  # S-15-4
+            y15_5 = [float(row[3]) for row in s_15_5_res]  # S-15-5
+            y15_6 = [float(row[3]) for row in s_15_6_res]  # S-15-6
+            y16 = [float(row[3]) for row in s_16_res]  # S-16
+            y19 = [float(row[3]) for row in s_19_res]  # S-19
+            
+            # 生成多条线图
+            fig  = Figure()
+            axis = fig.add_subplot(1, 1, 1)
+            axis.plot(x, y11_1 , label='S-11-1')
+            axis.plot(x, y11_2 , label='S-11-2')
+            axis.plot(x, y12 , label='S-12')
+            axis.plot(x, y13 , label='S-13')
+            axis.plot(x, y15_1 , label='S-15-1')
+            axis.plot(x, y15_2 , label='S-15-2')
+            axis.plot(x, y15_3 , label='S-15-3')
+            axis.plot(x, y15_4 , label='S-15-4')
+            axis.plot(x, y15_5 , label='S-15-5')
+            axis.plot(x, y15_6 , label='S-15-6')
+            axis.plot(x, y16 , label='S-16')
+            axis.plot(x, y19 , label='S-19')
+
+            axis.set_title('Quality Control Sensor Temp')
+            axis.set_xlabel('date time')
+            axis.set_ylabel('value (°C)')
+    
+            axis.legend()
+            fig.tight_layout()
+
+            img = io.BytesIO()
+            FigureCanvas(fig).print_png(img)
+            img.seek(0)
+
+            # Convert the image to base64 for embedding in HTML
+            img_data = base64.b64encode(img.getvalue()).decode('utf-8')
+
+            return img_data
+
+        except Exception as e:
+            logging.error('< Error > show_factory_monitor_detail_quality_control_temp_img : ' + str(e))
+
+        finally:
+            self.__disconnect4__()
+
+    ##############################################
+    # show_factory_monitor_detail_temp_rh_img_1
+    ##############################################
+    def show_factory_monitor_detail_temp_rh_img_1(self , s_kind):
+        
+        self.__connect4__()
+        
+        try:
+            ### r_time
+            r_date = time.strftime("%Y_%m" , time.localtime())
+            r_time = time.strftime("%Y-%m-%d %H:%M:%S" , time.localtime())
+
+            # all device user 
+            d_sql = f"select r_time , s_content , s_protocol , val_1 , val_2 , val_3 , val_4 , val_5   from {r_date} where s_kind='{s_kind}' order by r_time desc limit 0,40"
+            self.curr.execute(d_sql)
+            d_res = self.curr.fetchall() 
+
+            x  = [row[0] for row in d_res]  # x轴数据
+            y1 = [float(row[3]) for row in d_res]  # 第一条线的y轴数据
+            
+            # 生成多条线图
+            fig  = Figure()
+            axis = fig.add_subplot(1, 1, 1)
+            axis.plot(x, y1 , label='Temp' ,  marker='o', markersize=4)
+            axis.set_title(s_kind + ' Temp')
+            axis.set_xlabel('date time')
+            axis.set_ylabel('value (°C)')
+    
+            axis.legend()
+            fig.tight_layout()
+
+            img = io.BytesIO()
+            FigureCanvas(fig).print_png(img)
+            img.seek(0)
+
+            # Convert the image to base64 for embedding in HTML
+            img_data = base64.b64encode(img.getvalue()).decode('utf-8')
+
+            return img_data
+
+        except Exception as e:
+            logging.error('< Error > show_factory_monitor_detail_temp_rh_img_1 : ' + str(e))
+
+        finally:
+            self.__disconnect4__()
+
     ################################
     # show_factory_monitor_detail
     ################################
@@ -1587,7 +2450,7 @@ class web_cloud_dao:
             r_time = time.strftime("%Y-%m-%d %H:%M:%S" , time.localtime())
 
             # all device user 
-            d_sql = f"select r_time , s_content , s_protocol , val_1 , val_2 , val_3 , val_4 , val_5   from {r_date} where s_kind='{s_kind}' order by r_time desc limit 0,20"
+            d_sql = f"select r_time , s_content , s_protocol , val_1 , val_2 , val_3 , val_4 , val_5   from {r_date} where s_kind='{s_kind}' order by r_time desc limit 0,40"
             self.curr.execute(d_sql)
             d_res = self.curr.fetchall() 
 

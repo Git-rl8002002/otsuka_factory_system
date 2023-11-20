@@ -134,14 +134,14 @@
                     <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-bookmarks"></i> 資料查詢</a>
                         <ul class="dropdown-menu">
                             <li class="dropdown-submenu"><a class="dropdown-item" href="/department_no_search"><i class="bi bi-bookmarks"></i> 部門代號查詢</a></li>
-                            <li class="dropdown-submenu"></li><a class="dropdown-item" href="/card_reader_member_search"><i class="bi bi-bookmarks"></i> 人員位置查詢</a></li>
+                            <li class="dropdown-submenu"></li><a class="dropdown-item" href="/card_reader_member_search"><i class="bi bi-file-earmark-text"></i> 人員位置查詢</a></li>
                         </ul>
                     </li>
 
                     <!-- 工作紀錄 -->
                     <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-bookmarks"></i> 工作紀錄</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/production_3_work_time_record"><i class="bi bi-bookmarks"></i> 液劑工時時間記錄表</a></li>        
+                            <li><a class="dropdown-item" href="/production_3_work_time_record"><i class="bi bi-file-earmark-text"></i> 液劑工時時間記錄表</a></li>        
                         </ul>
                     </li>
                 </ul> 
@@ -159,16 +159,16 @@
                     <!-- 資料查詢 -->
                     <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-bookmarks"></i> 資料查詢</a>
                         <ul class="dropdown-menu">
-                            <li class="dropdown-submenu"><a class="dropdown-item" href="/department_no_search"><i class="bi bi-bookmarks"></i> 部門代號查詢</a></li>
-                            <li class="dropdown-submenu"></li><a class="dropdown-item" href="/card_reader_member_search"><i class="bi bi-bookmarks"></i> 人員位置查詢</a></li>
+                            <li class="dropdown-submenu"><a class="dropdown-item" href="/department_no_search"><i class="bi bi-file-earmark-text"></i> 部門代號查詢</a></li>
+                            <li class="dropdown-submenu"></li><a class="dropdown-item" href="/card_reader_member_search"><i class="bi bi-file-earmark-text"></i> 人員位置查詢</a></li>
                         </ul>
                     </li>
 
                     <!-- 工作紀錄 -->
                     <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-bookmarks"></i> 工作紀錄</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/production_3_work_time_record"><i class="bi bi-bookmarks"></i> 液劑工時時間記錄表</a></li>
-                            <li><a class="dropdown-item" href="/production_2_work_check_record"><i class="bi bi-bookmarks"></i> 人員考核表</a></li>        
+                            <li><a class="dropdown-item" href="/production_3_work_time_record"><i class="bi bi-file-earmark-text"></i> 液劑工時時間記錄表</a></li>
+                            <li><a class="dropdown-item" href="/production_2_work_check_record"><i class="bi bi-file-earmark-text"></i> 人員考核表</a></li>        
                         </ul>
                     </li>
                 </ul> 
@@ -186,14 +186,14 @@
                     <!-- 資料查詢 -->
                     <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-bookmarks"></i> 資料查詢</a>
                         <ul class="dropdown-menu">
-                            <li class="dropdown-submenu"><a class="dropdown-item" href="/department_no_search"><i class="bi bi-bookmarks"></i> 部門代號查詢</a></li>
-                            <li class="dropdown-submenu"></li><a class="dropdown-item" href="/card_reader_member_search"><i class="bi bi-bookmarks"></i> 人員位置查詢</a></li>
+                            <li class="dropdown-submenu"><a class="dropdown-item" href="/department_no_search"><i class="bi bi-file-earmark-text"></i> 部門代號查詢</a></li>
+                            <li class="dropdown-submenu"></li><a class="dropdown-item" href="/card_reader_member_search"><i class="bi bi-file-earmark-text"></i> 人員位置查詢</a></li>
                         </ul>
                     </li>
                     <!-- 工作紀錄 -->
                     <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-bookmarks"></i> 工作紀錄</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/production_3_work_time_record"><i class="bi bi-bookmarks"></i> 液劑工時時間記錄表</a></li>        
+                            <li><a class="dropdown-item" href="/production_3_work_time_record"><i class="bi bi-file-earmark-text"></i> 液劑工時時間記錄表</a></li>        
                         </ul>
                     </li>
                 </ul> 
@@ -212,17 +212,304 @@
                     <li><a class="dropdown-item"><i class="bi bi-bookmarks"></i> 日當月報表</a></li>
                     <li><a class="dropdown-item"><i class="bi bi-bookmarks"></i> 日當月報表</a></li>
                     -->
-                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-bookmarks"></i> 日當月報表</a>
+                    <!-- 月報表 -->
+                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-bookmarks"></i> 月報表</a>
                         <ul class="dropdown-menu">
-                            {% for month in day_money_by_month %}
-                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                            <!-- 日當 -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> 日當</a>
                                 <ul class="dropdown-menu">
-                                    <li class="dropdown-item"><a href="/download_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
-                                </ul> 
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
                             </li>
-                            {% endfor %}
+                            <!-- 交通費 -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> 交通費</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_traffic_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_traffic_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <!-- 超里程 -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> 超里程</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_over_traffic_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_over_traffic_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <!-- 停車費 -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> 停車費</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_parking_fee_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_parking_fee_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <!-- 過路費 -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> 過路費</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_tolls_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_tolls_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <!-- 車票 -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> 車票</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_trick_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_trick_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <!-- Taxi -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> Taxi</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_taxi_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_taxi_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <!-- 住宿 -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> 住宿</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_stay_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_stay_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <!-- 其他 -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> 其他</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_other_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_other_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <!-- 油單 -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> 油單</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_oil_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_oil_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
                         </ul>
                     </li>
+                </ul> 
+            </li>
+            
+            <!-------------- 
+            -    
+            - 資訊部 
+            -
+            ---------------->    
+            {% elif dep_id == "0AA80" %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="db-system" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false"><i class="bi bi-server"></i> 資訊部</a>
+                <ul class="dropdown-menu" aria-labelledby="db-system">
+                    <!--
+                    <li><a class="dropdown-item"><i class="bi bi-bookmarks"></i> 日當月報表</a></li>
+                    <li><a class="dropdown-item"><i class="bi bi-bookmarks"></i> 日當月報表</a></li>
+                    -->
+                    
+                    <!-- 資料查詢 -->
+                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-bookmarks"></i> 資料查詢</a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-submenu"><a class="dropdown-item" href="/department_no_search"><i class="bi bi-file-earmark-text"></i> 部門代號查詢</a></li>
+                            <li class="dropdown-submenu"></li><a class="dropdown-item" href="/card_reader_member_search"><i class="bi bi-file-earmark-text"></i> 人員位置查詢</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- 工作紀錄 -->
+                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-bookmarks"></i> 工作紀錄</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/production_3_work_time_record"><i class="bi bi-file-earmark-text"></i> 液劑工時時間記錄表</a></li>
+                            <li><a class="dropdown-item" href="/production_2_work_check_record"><i class="bi bi-file-earmark-text"></i> 人員考核表</a></li>        
+                        </ul>
+                    </li>
+
+                    <!-- 使用紀錄 -->
+                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-bookmarks"></i> 使用紀錄</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/computer_used_record"><i class="bi bi-file-earmark-text"></i> 電腦使用紀錄</a></li>       
+                        </ul>
+                    </li>
+
+                    <!-- 監控紀錄 -->
+                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-bookmarks"></i> 監控紀錄</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/factory_monitor_record"><i class="bi bi-file-earmark-text"></i> 工廠溫溼度紀錄</a></li>       
+                        </ul>
+                    </li>
+
+                    <!-- 月報表 -->
+                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-bookmarks"></i> 月報表</a>
+                        <ul class="dropdown-menu">
+                            <!-- 日當 -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> 日當</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <!-- 交通費 -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> 交通費</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_traffic_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_traffic_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <!-- 超里程 -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> 超里程</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_over_traffic_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_over_traffic_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <!-- 停車費 -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> 停車費</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_parking_fee_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_parking_fee_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <!-- 過路費 -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> 過路費</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_tolls_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_tolls_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <!-- 車票 -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> 車票</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_trick_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_trick_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <!-- Taxi -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> Taxi</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_taxi_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_taxi_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <!-- 住宿 -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> 住宿</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_stay_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_stay_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <!-- 其他 -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> 其他</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_other_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_other_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <!-- 油單 -->
+                            <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle"><i class="bi bi-file-text"></i> 油單</a>
+                                <ul class="dropdown-menu">
+                                    {% for month in day_money_by_month %}
+                                    <li class="dropdown-submenu"><a href="#" class="dropdown-item dropdown-toggle" id="{{day_money_by_year}}/{{month[0]}}" onclick="show_day_month_oil_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ day_money_by_year }}年{{ month[0] }}月</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/download_oil_excel?year={{day_money_by_year}}&month={{month[0]}}"><i class="bi bi-cloud-download"></i> 下載</a></li>
+                                        </ul> 
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    
                 </ul> 
             </li>
 
@@ -254,22 +541,14 @@
             -
             -------------------->
             <div id="main_content" class="col-md-2 my-1">
-                <div id="load_work_time_data">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="text-primary"><i class="bi bi-chat-left-text"></i> 各部門刷卡紀錄</h4>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-hover table-bordered table-striped">
-                            {% for val in card_reader_res %}
-                                <tr>
-                                    <td id="{{ val[0] }}" onclick="load_card_reader_list(id)"><i class="bi bi-arrow-right-short"></i> {{ val[0] }} </td>
-                                </tr>    
-                            {% endfor %}
-                            </table>
-                        </div>
-                    </div>
-                </div>
+
+                <ul class="list-group">
+                    <i class="list-group-item list-group-item-action active"><i class="bi bi-chat-left-text"></i> 各部門刷卡紀錄</i>
+                    {% for val in card_reader_res %}
+                        <li class="list-group-item list-group-item-action" id="{{ val[0] }}" onclick="load_card_reader_list(id)"><i class="bi bi-arrow-right-short"></i> {{ val[0] }} </li>
+                    {% endfor %}
+
+                </ul>
             </div>
 
             <!--------------

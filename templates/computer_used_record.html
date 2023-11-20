@@ -420,41 +420,30 @@
         <div class="row my-5">
             <div class="col-md-2 my-1">
                 <div id="main_content">
-                    <div class="card">
-                        
-                        <div class="card-header">
-                            <h4 class="text-primary"><i class="bi bi-chat-left-text"></i> 電腦使用清單</h4>
-                        </div>
-                        
-                        <div class="card-body">
+                    <ul class="list-group my-2">
+                        <li class="list-group-item list-group-item active"><i class="bi bi-chat-left-text"></i> 電腦使用清單</li>
+                        <!-- search by device number -->
+                        <li class="list-group-item list-group-item-action">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                </div>
+                                <input class="form-control" placeholder="電腦序號" onkeypress="search_show_computer_user_detail(value)">
+                            </div>
+                        </li>
 
-                            <ul class="list-group my-2">
-                                <!-- search by device number -->
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="bi bi-search"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="電腦序號" onkeypress="search_show_computer_user_detail(value)">
-                                    </div>
-                                </li>
+                        <!-- s_number list -->
+                        <li class="list-group-item list-group-item-action" onclick="show_computer_serial_name_list()"><i class="bi bi-file-earmark-text"></i> 設備序號清單</li>
+                    </ul>
 
-                                <!-- s_number list -->
-                                <li class="list-group-item list-group-item-action" onclick="show_computer_serial_name_list()"><i class="bi bi-file-earmark-text"></i> 設備序號清單</li>
-                            </ul>
-
-                            
-                            <ul class="list-group my-2">
-                            <!-- device list by user -->
-                                <li class="list-group-item list-group-item active">使用清單</li>
-                            {% for d_name in d_name %}               
-                                <li class="list-group-item list-group-item-action" id="{{ d_name[1] }}" onclick="show_computer_user_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ d_name[1] }}</li>
-                            {% endfor %}
-                            </ul>
-
-                        </div>
-
-                    </div>
+                    
+                    <ul class="list-group my-2">
+                    <!-- device list by user -->
+                        <li class="list-group-item list-group-item active">使用清單</li>
+                    {% for d_name in d_name %}               
+                        <li class="list-group-item list-group-item-action" id="{{ d_name[1] }}" onclick="show_computer_user_detail(id)"><i class="bi bi-file-earmark-text"></i> {{ d_name[1] }}</li>
+                    {% endfor %}
+                    </ul>
                 </div>
             </div>
 

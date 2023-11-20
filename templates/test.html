@@ -93,39 +93,24 @@
             
         });
     </script>	
+    <style>
+        /* CSS样式 */
+        .draggable {
+            width: 100px;
+            height: 100px;
+            background-color: #f1c40f;
+            border: 1px solid #d35400;
+            border-radius: 5px;
+            cursor: move;
+            position: absolute;
+        }
+    </style>
 
 
 </head>
 <body>
-<table class="table table-bordered table-striped table-hover">
-    {% for val in hr_account %}
-    <tr>
-        <td>{{ val[0] }}</td>
-        <td>{{ val[1] }}</td>
-        <td>{{ val[2] }}</td>
-        <td>{{ val[3] }}</td>
-        <td>{{ val[4] }}</td>
-        <td>{{ val[5] }}</td>
-        <td>{{ val[6] }}</td>
-        <td>{{ val[7] }}</td>
-        <td>{{ val[8] }}</td>
-        <td>{{ val[9] }}</td>
-        <td>{{ val[10] }}</td>
-        <td>{{ val[11] }}</td>
-        <td>{{ val[12] }}</td>
-        <td>{{ val[13] }}</td>
-        <td>{{ val[14] }}</td>
-        <td>{{ val[15] }}</td>
-        <td>{{ val[16] }}</td>
-        <td>{{ val[17] }}</td>
-        <td>{{ val[18] }}</td>
-        <td>{{ val[19] }}</td>
-        <td>{{ val[20] }}</td>
-        <td>{{ val[21] }}</td>
+    {{ img_data }}
 
-    </tr>
-    {% endfor %}
-</table>
 </body>
 </html>
 

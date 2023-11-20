@@ -41,7 +41,7 @@ m_device = {'S-1'   :'製品倉庫(一)25°C' , 'S-2'   :'製品倉庫(一)30°C
 otsuka_factory  = {'host':'192.168.1.93'    , 'port':3306 , 'user':'otsuka'     , 'pwd':'OtsukatW168!'         , 'db':'otsuka_factory'  , 'charset':'utf8'}
 otsuka_factory2 = {'host':'192.168.1.45'    , 'port':1433 , 'user':'HR2BPM'     , 'pwd':'Otsukatw14001297!'    , 'db':'Agentflow'       , 'charset':'utf8'}
 otsuka_factory3 = {'host':'192.168.1.31'    , 'port':1433 , 'user':'Jason_Hung' , 'pwd':'e03vu,4timqotu!'      , 'db':'SHRM'            , 'charset':'utf8'}
-otsuka_factory4  = {'host':'192.168.111.13' , 'port':3306 , 'user':'backup'     , 'pwd':'Otsukabackup#123'     , 'db':'tinfar_medicine' , 'charset':'utf8'}
+otsuka_factory4 = {'host':'192.168.111.13'  , 'port':3306 , 'user':'backup'     , 'pwd':'Otsukabackup#123'     , 'db':'tinfar_medicine' , 'charset':'utf8'}
 
 ############``
 #

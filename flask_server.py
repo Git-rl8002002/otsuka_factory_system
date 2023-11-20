@@ -11,14 +11,20 @@ from dataclasses import dataclass
 from distutils.log import debug
 from email import charset
 from hashlib import md5
-import hashlib , time , logging , random , openpyxl , csv , os , mimetypes
+import hashlib , time , logging , random , openpyxl , csv , os , mimetypes , pymysql
 from tabnanny import check
 from flask import Flask,render_template,request,session,url_for,redirect , Response , send_file 
 from flask_socketio import SocketIO , emit 
 from openpyxl.utils.dataframe import dataframe_to_rows
 from io import BytesIO
-import matplotlib.pyplot as plt
+
+
+### matplotlib 
+import io
 import base64
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 from control.config import *
 from control.web_cloud_dao import web_cloud_dao 
@@ -40,6 +46,14 @@ logging.basicConfig(format=log_format , level=logging.INFO , datefmt="%Y-%m-%d %
 title  = parm['title']
 
 
+
+##############################
+# /test2
+##############################
+@app.route("/test2")
+def test2():
+    return render_template('test2.html')    
+
 ##############################
 # /test
 ##############################
@@ -48,9 +62,64 @@ def test():
     #################
     # main content 
     #################
-    res      = db.erp_hr_account_list()
+    
+    ######################################
+    #
+    # Generate a simple Matplotlib plot
+    #
+    ######################################
+    fig = Figure()
+    axis = fig.add_subplot(1, 1, 1)
+    axis.plot([1, 2, 3, 4, 5], [2, 4, 6, 8, 10] , label='Line')
 
-    return render_template('test.html' , hr_account=res)    
+    # Save the plot to a BytesIO object
+    img = io.BytesIO()
+    FigureCanvas(fig).print_png(img)
+    img.seek(0)
+
+    # Convert the image to base64 for embedding in HTML
+    img_data = base64.b64encode(img.getvalue()).decode('utf-8')
+
+    ######################################
+    #
+    # Generate a simple Matplotlib plot
+    #
+    ######################################
+    fig2 = Figure()
+    axis2 = fig2.add_subplot(1, 1, 1)
+    axis2.plot([1, 2, 3, 4, 5], [2, 4, 6, 8, 10] , label='Points' , color='red' , marker='o')
+
+    # Save the plot to a BytesIO object
+    img2 = io.BytesIO()
+    FigureCanvas(fig2).print_png(img2)
+    img.seek(0)
+
+    # Convert the image to base64 for embedding in HTML
+    img_data2 = base64.b64encode(img2.getvalue()).decode('utf-8')
+
+    ######################################
+    #
+    # Generate a simple Matplotlib plot
+    #
+    ######################################
+    fig3 = Figure()
+    axis3 = fig3.add_subplot(1, 1, 1)
+
+    fig = plt.figure(figsize=(6,6))
+    ax = plt.subplot(projection='3d')   # 設定為 3D 圖表
+    x = range(5)
+    y = [1,5,8,4,6]
+    ax.plot(x,y)
+
+    # Save the plot to a BytesIO object
+    img3 = io.BytesIO()
+    FigureCanvas(fig3).print_png(img3)
+    img3.seek(0)
+
+    # Convert the image to base64 for embedding in HTML
+    img_data3 = base64.b64encode(img2.getvalue()).decode('utf-8')
+
+    return render_template('test.html', img_data=img_data , img_data2=img_data2)
 
 ##############################
 # /update_hr_account
@@ -284,10 +353,18 @@ def show_factory_monitor_detail():
             #################
             if request.method == 'POST':
                 
-                s_kind = request.form['s_kind']
-                kind_detail = db.show_factory_monitor_detail(s_kind)
+                s_kind                   = request.form['s_kind']
+                s_c_kind                 = m_device[s_kind]
+                kind_detail              = db.show_factory_monitor_detail(s_kind)
+                kind_detail_temp_img     = db.show_factory_monitor_detail_temp_img(s_kind)
+                kind_detail_rh_img       = db.show_factory_monitor_detail_rh_img(s_kind)
+                kind_detail_temp_pie_img = db.show_factory_monitor_detail_temp_pie_img(s_kind)
+                kind_detail_rh_pie_img   = db.show_factory_monitor_detail_rh_pie_img(s_kind)
+
+                kind_detail_temp_val = db.show_factory_monitor_detail_temp_val(s_kind)
+                kind_detail_rh_val   = db.show_factory_monitor_detail_rh_val(s_kind)
                     
-                return render_template('ajax/detail_factory_monitor_record.html' , user=user , title=title , dep_id=dep_id , s_kind=s_kind , kind_detail=kind_detail)
+                return render_template('ajax/detail_factory_monitor_record.html' , user=user , title=title , dep_id=dep_id , s_kind=s_kind , s_c_kind=s_c_kind , kind_detail=kind_detail , kind_detail_temp_img=kind_detail_temp_img , kind_detail_rh_img=kind_detail_rh_img , kind_detail_temp_val=kind_detail_temp_val , kind_detail_rh_val=kind_detail_rh_val , kind_detail_temp_pie_img=kind_detail_temp_pie_img , kind_detail_rh_pie_img=kind_detail_rh_pie_img)
 
         else:
             return redirect(url_for('logout'))
@@ -427,8 +504,152 @@ def factory_monitor_record():
             # main content 
             #################
             kind_position = db.show_factory_monitor_position()
-                
-            return render_template('factory_monitor_record.html' , user=user , title=title , dep_id=dep_id , kind_position=kind_position)
+            
+            warehouse_c              = 'Warehouse and Quality control sensor Temp'
+            warehouse_temp_img       = db.show_factory_monitor_detail_warehouse_temp_img()
+            warehouse_rh_img         = db.show_factory_monitor_detail_warehouse_rh_img()
+            quality_control_temp_img = db.show_factory_monitor_detail_quality_control_temp_img()
+            quality_control_rh_img   = db.show_factory_monitor_detail_quality_control_rh_img()
+
+            '''
+            s_1_c        = 'S-1 ' + m_device['S-1']
+            s_1_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-1')
+            s_1_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-1')
+            
+            s_2_c        = 'S-2 ' + m_device['S-2']
+            s_2_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-2')
+            s_2_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-2')
+
+            s_3_c        = 'S-3 ' + m_device['S-3']
+            s_3_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-3')
+            s_3_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-3')
+
+            s_4_c        = 'S-4 ' + m_device['S-4']
+            s_4_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-4')
+            s_4_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-4')
+
+            s_5_c        = 'S-5 ' + m_device['S-5']
+            s_5_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-5')
+            s_5_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-5')
+
+            s_6_c        = 'S-6 ' + m_device['S-6']
+            s_6_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-6')
+            s_6_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-6')
+
+            s_7_c        = 'S-7 ' + m_device['S-7']
+            s_7_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-7')
+            s_7_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-7')
+
+            s_8_c        = 'S-8 ' + m_device['S-8']
+            s_8_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-8')
+            s_8_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-8')
+
+            s_9_c        = 'S-9 ' + m_device['S-9']
+            s_9_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-9')
+            s_9_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-9')
+
+            s_10_c        = 'S-10 ' + m_device['S-10']
+            s_10_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-10')
+            s_10_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-10')
+
+            s_11_1_c        = 'S-11-1 ' + m_device['S-11-1']
+            s_11_1_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-11-1')
+            s_11_1_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-11-1')
+
+            s_11_2_c        = 'S-11-2 ' + m_device['S-11-2']
+            s_11_2_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-11-2')
+            s_11_2_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-11-2')
+            
+            s_12_c        = 'S-12 ' + m_device['S-12']
+            s_12_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-12')
+            s_12_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-12')
+
+            s_13_c        = 'S-13 ' + m_device['S-13']
+            s_13_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-13')
+            s_13_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-13')
+
+            s_14_c        = 'S-14 ' + m_device['S-14']
+            s_14_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-14')
+            s_14_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-14')
+
+            s_15_1_c        = 'S-15-1 ' + m_device['S-15-1']
+            s_15_1_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-15-1')
+            s_15_1_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-15-1')
+
+            s_15_2_c        = 'S-15-2 ' + m_device['S-15-2']
+            s_15_2_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-15-2')
+            s_15_2_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-15-2')
+
+            s_15_3_c        = 'S-15-3 ' + m_device['S-15-3']
+            s_15_3_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-15-3')
+            s_15_3_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-15-3')
+
+            s_15_4_c        = 'S-15-4 ' + m_device['S-15-4']
+            s_15_4_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-15-4')
+            s_15_4_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-15-4')
+            
+            s_15_5_c        = 'S-15-5 ' + m_device['S-15-5']
+            s_15_5_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-15-5')
+            s_15_5_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-15-5')
+
+            s_15_6_c        = 'S-15-6 ' + m_device['S-15-6']
+            s_15_6_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-15-6')
+            s_15_6_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-15-6')
+
+            s_16_c        = 'S-16 ' + m_device['S-16']
+            s_16_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-16')
+            s_16_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-16')
+
+            s_17_c        = 'S-17 ' + m_device['S-17']
+            s_17_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-17')
+            s_17_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-17')
+
+            s_18_c        = 'S-18 ' + m_device['S-18']
+            s_18_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-18')
+            s_18_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-18')
+
+            s_19_c        = 'S-19 ' + m_device['S-19']
+            s_19_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-19')
+            s_19_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-19')
+            
+            return render_template('factory_monitor_record.html' , 
+                                   user=user , title=title , dep_id=dep_id , kind_position=kind_position , 
+                                   warehouse_c=warehouse_c , warehouse_temp_img=warehouse_temp_img , quality_control_temp_img=quality_control_temp_img ,
+                                   s_1_c=s_1_c , s_1_temp_img=s_1_temp_img , s_1_rh_img=s_1_rh_img , 
+                                   s_2_c=s_2_c , s_2_temp_img=s_2_temp_img , s_2_rh_img=s_2_rh_img , 
+                                   s_3_c=s_3_c , s_3_temp_img=s_3_temp_img , s_3_rh_img=s_3_rh_img , 
+                                   s_4_c=s_4_c , s_4_temp_img=s_4_temp_img , s_4_rh_img=s_4_rh_img , 
+                                   s_5_c=s_5_c , s_5_temp_img=s_5_temp_img , s_5_rh_img=s_5_rh_img , 
+                                   s_6_c=s_6_c , s_6_temp_img=s_6_temp_img , s_6_rh_img=s_6_rh_img , 
+                                   s_7_c=s_7_c , s_7_temp_img=s_7_temp_img , s_7_rh_img=s_7_rh_img , 
+                                   s_8_c=s_8_c , s_8_temp_img=s_8_temp_img , s_8_rh_img=s_8_rh_img , 
+                                   s_9_c=s_9_c , s_9_temp_img=s_9_temp_img , s_9_rh_img=s_9_rh_img , 
+                                   s_10_c=s_10_c , s_10_temp_img=s_10_temp_img , s_10_rh_img=s_10_rh_img ,
+                                   s_11_1_c=s_11_1_c , s_11_1_temp_img=s_11_1_temp_img , s_11_1_rh_img=s_11_1_rh_img , 
+                                   s_11_2_c=s_11_2_c , s_11_2_temp_img=s_11_2_temp_img , s_11_2_rh_img=s_11_2_rh_img ,
+                                   s_12_c=s_12_c , s_12_temp_img=s_12_temp_img , s_12_rh_img=s_12_rh_img ,
+                                   s_13_c=s_13_c , s_13_temp_img=s_13_temp_img , s_13_rh_img=s_13_rh_img ,
+                                   s_14_c=s_14_c , s_14_temp_img=s_14_temp_img , s_14_rh_img=s_14_rh_img ,
+                                   s_15_1_c=s_15_1_c , s_15_1_temp_img=s_15_1_temp_img , s_15_1_rh_img=s_15_1_rh_img , 
+                                   s_15_2_c=s_15_2_c , s_15_2_temp_img=s_15_2_temp_img , s_15_2_rh_img=s_15_2_rh_img , 
+                                   s_15_3_c=s_15_3_c , s_15_3_temp_img=s_15_3_temp_img , s_15_3_rh_img=s_15_3_rh_img , 
+                                   s_15_4_c=s_15_4_c , s_15_4_temp_img=s_15_4_temp_img , s_15_4_rh_img=s_15_4_rh_img , 
+                                   s_15_5_c=s_15_5_c , s_15_5_temp_img=s_15_5_temp_img , s_15_5_rh_img=s_15_5_rh_img , 
+                                   s_15_6_c=s_15_6_c , s_15_6_temp_img=s_15_6_temp_img , s_15_6_rh_img=s_15_6_rh_img , 
+                                   s_16_c=s_16_c , s_16_temp_img=s_16_temp_img , s_16_rh_img=s_16_rh_img ,
+                                   s_17_c=s_17_c , s_17_temp_img=s_17_temp_img , s_17_rh_img=s_17_rh_img ,
+                                   s_18_c=s_18_c , s_18_temp_img=s_18_temp_img , s_18_rh_img=s_18_rh_img ,
+                                   s_19_c=s_19_c , s_19_temp_img=s_19_temp_img , s_19_rh_img=s_19_rh_img ,
+                                   warehouse_rh_img=warehouse_rh_img , quality_control_rh_img=quality_control_rh_img
+                                   )
+
+            '''
+            return render_template('factory_monitor_record.html' , 
+                                   user=user , title=title , dep_id=dep_id , kind_position=kind_position , 
+                                   warehouse_c=warehouse_c , warehouse_temp_img=warehouse_temp_img , quality_control_temp_img=quality_control_temp_img ,
+                                   warehouse_rh_img=warehouse_rh_img , quality_control_rh_img=quality_control_rh_img
+                                   )
+            
 
         else:
             return redirect(url_for('logout'))
