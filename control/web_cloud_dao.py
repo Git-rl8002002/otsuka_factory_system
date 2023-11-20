@@ -2654,7 +2654,7 @@ class web_cloud_dao:
 
         try:
             
-            sql  = f"SELECT department_name , department_code , department_id , count(*) FROM `hr_a` where login_id!='disabled' group by department_name" 
+            sql  = f"SELECT department_name , department_code , department_id , count(*) FROM `hr_a` group by department_code order by department_name desc" 
 
             self.curr.execute(sql)
             self.res = self.curr.fetchall()
