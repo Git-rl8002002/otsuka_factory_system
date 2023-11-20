@@ -505,151 +505,24 @@ def factory_monitor_record():
             #################
             kind_position = db.show_factory_monitor_position()
             
+            ### 日當月報表
+            day_money_by_year  = r_year
+            day_money_by_month = db.bpm_day_money_by_month(r_year)
+
+            ### 溫濕度圖表(品管,倉庫)
             warehouse_c              = 'Warehouse and Quality control sensor Temp'
             warehouse_temp_img       = db.show_factory_monitor_detail_warehouse_temp_img()
             warehouse_rh_img         = db.show_factory_monitor_detail_warehouse_rh_img()
             quality_control_temp_img = db.show_factory_monitor_detail_quality_control_temp_img()
             quality_control_rh_img   = db.show_factory_monitor_detail_quality_control_rh_img()
 
-            '''
-            s_1_c        = 'S-1 ' + m_device['S-1']
-            s_1_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-1')
-            s_1_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-1')
-            
-            s_2_c        = 'S-2 ' + m_device['S-2']
-            s_2_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-2')
-            s_2_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-2')
-
-            s_3_c        = 'S-3 ' + m_device['S-3']
-            s_3_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-3')
-            s_3_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-3')
-
-            s_4_c        = 'S-4 ' + m_device['S-4']
-            s_4_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-4')
-            s_4_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-4')
-
-            s_5_c        = 'S-5 ' + m_device['S-5']
-            s_5_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-5')
-            s_5_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-5')
-
-            s_6_c        = 'S-6 ' + m_device['S-6']
-            s_6_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-6')
-            s_6_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-6')
-
-            s_7_c        = 'S-7 ' + m_device['S-7']
-            s_7_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-7')
-            s_7_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-7')
-
-            s_8_c        = 'S-8 ' + m_device['S-8']
-            s_8_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-8')
-            s_8_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-8')
-
-            s_9_c        = 'S-9 ' + m_device['S-9']
-            s_9_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-9')
-            s_9_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-9')
-
-            s_10_c        = 'S-10 ' + m_device['S-10']
-            s_10_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-10')
-            s_10_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-10')
-
-            s_11_1_c        = 'S-11-1 ' + m_device['S-11-1']
-            s_11_1_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-11-1')
-            s_11_1_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-11-1')
-
-            s_11_2_c        = 'S-11-2 ' + m_device['S-11-2']
-            s_11_2_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-11-2')
-            s_11_2_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-11-2')
-            
-            s_12_c        = 'S-12 ' + m_device['S-12']
-            s_12_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-12')
-            s_12_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-12')
-
-            s_13_c        = 'S-13 ' + m_device['S-13']
-            s_13_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-13')
-            s_13_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-13')
-
-            s_14_c        = 'S-14 ' + m_device['S-14']
-            s_14_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-14')
-            s_14_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-14')
-
-            s_15_1_c        = 'S-15-1 ' + m_device['S-15-1']
-            s_15_1_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-15-1')
-            s_15_1_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-15-1')
-
-            s_15_2_c        = 'S-15-2 ' + m_device['S-15-2']
-            s_15_2_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-15-2')
-            s_15_2_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-15-2')
-
-            s_15_3_c        = 'S-15-3 ' + m_device['S-15-3']
-            s_15_3_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-15-3')
-            s_15_3_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-15-3')
-
-            s_15_4_c        = 'S-15-4 ' + m_device['S-15-4']
-            s_15_4_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-15-4')
-            s_15_4_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-15-4')
-            
-            s_15_5_c        = 'S-15-5 ' + m_device['S-15-5']
-            s_15_5_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-15-5')
-            s_15_5_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-15-5')
-
-            s_15_6_c        = 'S-15-6 ' + m_device['S-15-6']
-            s_15_6_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-15-6')
-            s_15_6_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-15-6')
-
-            s_16_c        = 'S-16 ' + m_device['S-16']
-            s_16_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-16')
-            s_16_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-16')
-
-            s_17_c        = 'S-17 ' + m_device['S-17']
-            s_17_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-17')
-            s_17_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-17')
-
-            s_18_c        = 'S-18 ' + m_device['S-18']
-            s_18_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-18')
-            s_18_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-18')
-
-            s_19_c        = 'S-19 ' + m_device['S-19']
-            s_19_temp_img = db.show_factory_monitor_detail_temp_rh_img_1('S-19')
-            s_19_rh_img   = db.show_factory_monitor_detail_temp_rh_img_2('S-19')
             
             return render_template('factory_monitor_record.html' , 
                                    user=user , title=title , dep_id=dep_id , kind_position=kind_position , 
                                    warehouse_c=warehouse_c , warehouse_temp_img=warehouse_temp_img , quality_control_temp_img=quality_control_temp_img ,
-                                   s_1_c=s_1_c , s_1_temp_img=s_1_temp_img , s_1_rh_img=s_1_rh_img , 
-                                   s_2_c=s_2_c , s_2_temp_img=s_2_temp_img , s_2_rh_img=s_2_rh_img , 
-                                   s_3_c=s_3_c , s_3_temp_img=s_3_temp_img , s_3_rh_img=s_3_rh_img , 
-                                   s_4_c=s_4_c , s_4_temp_img=s_4_temp_img , s_4_rh_img=s_4_rh_img , 
-                                   s_5_c=s_5_c , s_5_temp_img=s_5_temp_img , s_5_rh_img=s_5_rh_img , 
-                                   s_6_c=s_6_c , s_6_temp_img=s_6_temp_img , s_6_rh_img=s_6_rh_img , 
-                                   s_7_c=s_7_c , s_7_temp_img=s_7_temp_img , s_7_rh_img=s_7_rh_img , 
-                                   s_8_c=s_8_c , s_8_temp_img=s_8_temp_img , s_8_rh_img=s_8_rh_img , 
-                                   s_9_c=s_9_c , s_9_temp_img=s_9_temp_img , s_9_rh_img=s_9_rh_img , 
-                                   s_10_c=s_10_c , s_10_temp_img=s_10_temp_img , s_10_rh_img=s_10_rh_img ,
-                                   s_11_1_c=s_11_1_c , s_11_1_temp_img=s_11_1_temp_img , s_11_1_rh_img=s_11_1_rh_img , 
-                                   s_11_2_c=s_11_2_c , s_11_2_temp_img=s_11_2_temp_img , s_11_2_rh_img=s_11_2_rh_img ,
-                                   s_12_c=s_12_c , s_12_temp_img=s_12_temp_img , s_12_rh_img=s_12_rh_img ,
-                                   s_13_c=s_13_c , s_13_temp_img=s_13_temp_img , s_13_rh_img=s_13_rh_img ,
-                                   s_14_c=s_14_c , s_14_temp_img=s_14_temp_img , s_14_rh_img=s_14_rh_img ,
-                                   s_15_1_c=s_15_1_c , s_15_1_temp_img=s_15_1_temp_img , s_15_1_rh_img=s_15_1_rh_img , 
-                                   s_15_2_c=s_15_2_c , s_15_2_temp_img=s_15_2_temp_img , s_15_2_rh_img=s_15_2_rh_img , 
-                                   s_15_3_c=s_15_3_c , s_15_3_temp_img=s_15_3_temp_img , s_15_3_rh_img=s_15_3_rh_img , 
-                                   s_15_4_c=s_15_4_c , s_15_4_temp_img=s_15_4_temp_img , s_15_4_rh_img=s_15_4_rh_img , 
-                                   s_15_5_c=s_15_5_c , s_15_5_temp_img=s_15_5_temp_img , s_15_5_rh_img=s_15_5_rh_img , 
-                                   s_15_6_c=s_15_6_c , s_15_6_temp_img=s_15_6_temp_img , s_15_6_rh_img=s_15_6_rh_img , 
-                                   s_16_c=s_16_c , s_16_temp_img=s_16_temp_img , s_16_rh_img=s_16_rh_img ,
-                                   s_17_c=s_17_c , s_17_temp_img=s_17_temp_img , s_17_rh_img=s_17_rh_img ,
-                                   s_18_c=s_18_c , s_18_temp_img=s_18_temp_img , s_18_rh_img=s_18_rh_img ,
-                                   s_19_c=s_19_c , s_19_temp_img=s_19_temp_img , s_19_rh_img=s_19_rh_img ,
-                                   warehouse_rh_img=warehouse_rh_img , quality_control_rh_img=quality_control_rh_img
+                                   warehouse_rh_img=warehouse_rh_img , quality_control_rh_img=quality_control_rh_img ,
+                                   day_money_by_year=day_money_by_year , day_money_by_month=day_money_by_month
                                    )
-
-            '''
-            return render_template('factory_monitor_record.html' , 
-                                   user=user , title=title , dep_id=dep_id , kind_position=kind_position , 
-                                   warehouse_c=warehouse_c , warehouse_temp_img=warehouse_temp_img , quality_control_temp_img=quality_control_temp_img ,
-                                   warehouse_rh_img=warehouse_rh_img , quality_control_rh_img=quality_control_rh_img
-                                   )
-            
 
         else:
             return redirect(url_for('logout'))
@@ -688,6 +561,8 @@ def computer_used_record():
             #################
             # main content 
             #################
+            
+            ### 日當月報表
             day_money_by_year  = r_year
             day_money_by_month = db.bpm_day_money_by_month(r_year)
             d_name             = db.show_device_name_list()
@@ -1831,6 +1706,7 @@ def prouuction_3_work_time_record():
         dep_id     = session['department_id']
 
         ### r_time
+        r_year = time.strftime("%Y" , time.localtime())
         r_date = time.strftime("%Y-%m-%d" , time.localtime())
         r_time = time.strftime("%Y-%m-%d %H:%M:%S" , time.localtime())
 
@@ -1849,7 +1725,11 @@ def prouuction_3_work_time_record():
             a_work_no = db.search_item('employee_id' , user)
             a_name    = db.search_item('employee_name' , user)
 
-            return render_template('production_3_work_time_record.html' , user=user , lv=lv , title=title , r_date=r_date , factory_work_station=factory_work_station , a_work_no=a_work_no , a_name=a_name , dep_id=dep_id)
+            ### 日當月報表
+            day_money_by_year  = r_year
+            day_money_by_month = db.bpm_day_money_by_month(r_year)
+
+            return render_template('production_3_work_time_record.html' , user=user , lv=lv , title=title , r_date=r_date , factory_work_station=factory_work_station , a_work_no=a_work_no , a_name=a_name , dep_id=dep_id , day_money_by_year=day_money_by_year , day_money_by_month=day_money_by_month)
 
         else:
             return redirect(url_for('logout'))
@@ -1897,6 +1777,42 @@ def prouuction_1_work_time_record():
             return redirect(url_for('logout'))
 
     return redirect(url_for('login')) 
+
+############################
+# /department_list_detail
+############################
+@app.route("/department_list_detail" , methods=['GET','POST'])
+def department_list_detail():
+    
+    ### session 
+    user = session['user']
+    lv   = session['lv']
+    login_code = session['login_code']
+    dep_id     = session['department_id']
+
+    ### r_time
+    r_date  = time.strftime("%Y-%m-%d" , time.localtime())
+    r_time  = time.strftime("%Y-%m-%d %H:%M:%S" , time.localtime())
+    r_year  = time.strftime("%Y" , time.localtime())
+    r_month = time.strftime("%m" , time.localtime())
+
+    ### check repeat login
+    check_repeat_login = db.check_login_code(user,login_code)
+    
+    operation_record_title = '部門詳細資料'    
+    ### operation record
+    db.operation_record(r_time,user,login_code,operation_record_title)    
+
+    #################
+    # main content 
+    #################
+
+    if request.method == 'POST':
+
+        d_code   = request.form['d_code']
+        d_e_name = db.department_list_detail(d_code)
+        
+        return render_template('ajax/department_list_detail.html' , user=user , lv=lv , title=title , operation_record_title=operation_record_title , r_date=r_date , d_e_name=d_e_name)
 
 ##############################
 # /department_no_search_val
@@ -1968,8 +1884,15 @@ def department_no_search():
             #################
             # main content 
             #################
+
+            ### 日當月報表
+            day_money_by_year  = r_year
+            day_money_by_month = db.bpm_day_money_by_month(r_year)
+
+            ### 部門清單
+            department_list = db.department_account_list()
             
-            return render_template('search_department_id.html' , user=user , lv=lv , title=title , operation_record_title=operation_record_title , r_date=r_date , dep_id=dep_id)
+            return render_template('search_department_id.html' , user=user , lv=lv , title=title , operation_record_title=operation_record_title , r_date=r_date , dep_id=dep_id , day_money_by_year=day_money_by_year , day_money_by_month=day_money_by_month , department_list=department_list)
         
         else:
             return redirect(url_for('logout'))
@@ -2615,6 +2538,10 @@ def production_2_work_check_record():
             session['employee_id'] = db.search_item('employee_id' , user)
             session['end_date']    = db.search_item('end_date' , user)
 
+            ### 日當月報表
+            day_money_by_year  = r_year
+            day_money_by_month = db.bpm_day_money_by_month(r_year)
+
             factory_work_station = db.factory_work_station()
             a_work_no            = session['employee_id']
             a_name               = session['user']
@@ -2626,7 +2553,7 @@ def production_2_work_check_record():
             res_check_list       = db.check_add_check_member_list(user)
             res_check_self_list  = db.check_add_check_member_self_list()
 
-            return render_template('production_2_work_check_record.html' , user=user , lv=lv , title=title , r_date=r_date , factory_work_station=factory_work_station , a_work_no=a_work_no , a_name=a_name , a_end_date=a_end_date , dep_id=dep_id , check_year=r_year , check_month=r_month , a_job_title=a_job_title , a_member_check_list=a_member_check_list , res_check_list=res_check_list , res_check_self_list=res_check_self_list)
+            return render_template('production_2_work_check_record.html' , user=user , lv=lv , title=title , r_date=r_date , factory_work_station=factory_work_station , a_work_no=a_work_no , a_name=a_name , a_end_date=a_end_date , dep_id=dep_id , check_year=r_year , check_month=r_month , a_job_title=a_job_title , a_member_check_list=a_member_check_list , res_check_list=res_check_list , res_check_self_list=res_check_self_list , day_money_by_yea=day_money_by_year , day_money_by_month=day_money_by_month)
             
         else:
             return redirect(url_for('logout'))
@@ -2762,6 +2689,7 @@ def card_reader_member_search():
         dep_id     = session['department_id']
 
         ### r_time
+        r_year = time.strftime("%Y" , time.localtime())
         r_date = time.strftime("%Y-%m-%d" , time.localtime())
         r_time = time.strftime("%Y-%m-%d %H:%M:%S" , time.localtime())
 
@@ -2776,25 +2704,10 @@ def card_reader_member_search():
             #################
             # main content 
             #################
-            '''
-            if request.method == 'POST':
-                
-                b_date = request.form['b_date']
-                e_id   = request.form['e_id']
-                e_name = request.form['e_name']
-
-                factory_work_station = db.factory_work_station()
-                a_work_no = db.search_item('employee_id' , user)
-                a_name    = db.search_item('employee_name' , user)
-
-                res_work_time_list      = db.show_work_time_list(a_name , a_work_no)
-                normal_total_time       = db.show_work_time_total_val(a_name , a_work_no , 'normal_time')
-                over_total_time         = db.show_work_time_total_val(a_name , a_work_no , 'over_time')
-                availability_total_time = db.show_work_time_total_val(a_name , a_work_no , 'availability_time')
-                total_time              = db.show_work_time_total_val(a_name , a_work_no , 'total_time')
-
-                load_work_time_data = db.load_work_time_data_list(e_id , e_name , b_date)
-            '''
+            
+            ### 日當月報表
+            day_money_by_year  = r_year
+            day_money_by_month = db.bpm_day_money_by_month(r_year)
 
             factory_work_station = db.factory_work_station()
             a_work_no = db.search_item('employee_id' , user)
@@ -2812,8 +2725,7 @@ def card_reader_member_search():
             card_reader_res3 = db.load_group_member_list(user)
 
 
-            return render_template('search_card_reader_member.html' , user=user , lv=lv , title=title , r_date=r_date , factory_work_station=factory_work_station , a_work_no=a_work_no , a_name=a_name , dep_id=dep_id , res_work_time_list=res_work_time_list , normal_total_time=normal_total_time , over_total_time=over_total_time , availability_total_time=availability_total_time , total_time=total_time , card_reader_res=card_reader_res)
-            #return render_template('search_card_reader_member.html' , user=user , lv=lv , title=title , r_date=r_date , card_reader_res=card_reader_res , card_reader_res2=card_reader_res2 , card_reader_res3=card_reader_res3)
+            return render_template('search_card_reader_member.html' , user=user , lv=lv , title=title , r_date=r_date , factory_work_station=factory_work_station , a_work_no=a_work_no , a_name=a_name , dep_id=dep_id , res_work_time_list=res_work_time_list , normal_total_time=normal_total_time , over_total_time=over_total_time , availability_total_time=availability_total_time , total_time=total_time , card_reader_res=card_reader_res , day_money_by_year=day_money_by_year , day_money_by_month=day_money_by_month)
 
         else:
             return redirect(url_for('logout'))
@@ -2893,6 +2805,7 @@ def production_2_work_time_record():
         dep_id     = session['department_id']
 
         ### r_time
+        r_year = time.strftime("%Y" , time.localtime())
         r_date = time.strftime("%Y-%m-%d" , time.localtime())
         r_time = time.strftime("%Y-%m-%d %H:%M:%S" , time.localtime())
 
@@ -2911,13 +2824,17 @@ def production_2_work_time_record():
             a_work_no = db.search_item('employee_id' , user)
             a_name    = db.search_item('employee_name' , user)
 
+            ### 日當月報表
+            day_money_by_year  = r_year
+            day_money_by_month = db.bpm_day_money_by_month(r_year)
+
             res_work_time_list      = db.show_work_time_list(a_name , a_work_no)
             normal_total_time       = db.show_work_time_total_val(a_name , a_work_no , 'normal_time')
             over_total_time         = db.show_work_time_total_val(a_name , a_work_no , 'over_time')
             availability_total_time = db.show_work_time_total_val(a_name , a_work_no , 'availability_time')
             total_time              = db.show_work_time_total_val(a_name , a_work_no , 'total_time')
 
-            return render_template('production_2_work_time_record.html' , user=user , lv=lv , title=title , r_date=r_date , factory_work_station=factory_work_station , a_work_no=a_work_no , a_name=a_name , dep_id=dep_id , res_work_time_list=res_work_time_list , normal_total_time=normal_total_time , over_total_time=over_total_time , availability_total_time=availability_total_time , total_time=total_time)
+            return render_template('production_2_work_time_record.html' , user=user , lv=lv , title=title , r_date=r_date , factory_work_station=factory_work_station , a_work_no=a_work_no , a_name=a_name , dep_id=dep_id , res_work_time_list=res_work_time_list , normal_total_time=normal_total_time , over_total_time=over_total_time , availability_total_time=availability_total_time , total_time=total_time , day_money_by_year=day_money_by_year , day_money_by_month=day_money_by_month)
 
         else:
             return redirect(url_for('logout'))
@@ -2958,6 +2875,7 @@ def index():
             # main content 
             #################
 
+            ### 月報表
             day_money_by_year  = r_year
             day_money_by_month = db.bpm_day_money_by_month(r_year)
 

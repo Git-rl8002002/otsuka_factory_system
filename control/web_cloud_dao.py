@@ -2229,16 +2229,16 @@ class web_cloud_dao:
             x  = [row[0] for row in s_11_1_res]  # x轴数据
             y11_1 = [float(row[4]) for row in s_11_1_res]  # S-11-1
             y11_2 = [float(row[4]) for row in s_11_2_res]  # S-11-2
-            y12 = [float(row[4]) for row in s_12_res]  # S-12
-            y13 = [float(row[4]) for row in s_13_res]  # S-13
+            y12   = [float(row[4]) for row in s_12_res]  # S-12
+            y13   = [float(row[4]) for row in s_13_res]  # S-13
             y15_1 = [float(row[4]) for row in s_15_1_res]  # S-15-1
             y15_2 = [float(row[4]) for row in s_15_2_res]  # S-15-2
             y15_3 = [float(row[4]) for row in s_15_3_res]  # S-15-3
             y15_4 = [float(row[4]) for row in s_15_4_res]  # S-15-4
             y15_5 = [float(row[4]) for row in s_15_5_res]  # S-15-5
             y15_6 = [float(row[4]) for row in s_15_6_res]  # S-15-6
-            y16 = [float(row[4]) for row in s_16_res]  # S-16
-            y19 = [float(row[4]) for row in s_19_res]  # S-19
+            y16   = [float(row[4]) for row in s_16_res]  # S-16
+            y19   = [float(row[4]) for row in s_19_res]  # S-19
             
             # 生成多条线图
             fig  = Figure()
@@ -2595,7 +2595,7 @@ class web_cloud_dao:
             
             self.conn_mssql = pyodbc.connect(conn_str)
             self.curr_mssql = self.conn_mssql.cursor()
-            self.sql        = f"SELECT a.EMPID AS EmployeeID, CASE (isnull(a.HECNAME, '')) WHEN '' THEN '' ELSE a.HECNAME END AS EmployeeName, CASE (isnull(a.HEENAME, '')) WHEN '' THEN '' ELSE a.HEENAME END AS EmployeeEnglishName, CASE (isnull(a.LOGIN_ID, '')) WHEN '' THEN '' ELSE a.LOGIN_ID END AS LoginID, a.CPNYID AS CompanyID, a.DEPT_NO AS DepartmentID, '' AS IdentityID, a.SEX, CASE (isnull(a.EMAIL, '')) WHEN '' THEN '' ELSE a.EMAIL END AS Email, CASE (isnull(a.MOBILNO, '')) WHEN '' THEN '' ELSE a.MOBILNO END AS Mobile, SUBSTRING(a.BIRTHDAY, 1, 4) + '/' + SUBSTRING(a.BIRTHDAY, 5, 2) + '/' + SUBSTRING(a.BIRTHDAY, 5, 2) AS Birthday, a.POSSIE AS JobTitleCode, CASE (isnull(b.POS_NAME, '')) WHEN '' THEN '' ELSE b.POS_NAME END AS JobTitleName, CASE (isnull(a.GRADE, '')) WHEN '' THEN '' ELSE a.GRADE END AS JobGrade, CASE (isnull(a.RANK, '')) WHEN '' THEN '' ELSE a.RANK END AS JobRank, '' AS JobCode, '' AS JobType, SUBSTRING(a.INADATE, 1, 4) + '/' + SUBSTRING(a.INADATE, 5, 2) + '/' + SUBSTRING(a.INADATE, 5, 2) AS EnterDate, CASE (isnull(a.PLACE, '')) WHEN '' THEN '' ELSE a.PLACE END AS WorkPlace, '' AS AreaCode, CASE (isnull(a.MOBILNO, '')) WHEN '' THEN '' ELSE a.MOBILNO END AS HomePhone, CASE (isnull(a.EXT, '')) WHEN '' THEN '' ELSE a.EXT END AS OfficePhone, CASE (isnull(a.COMADDR, '')) WHEN '' THEN '' ELSE a.COMADDR END AS Address, '' AS Synopsis FROM              dbo.HRUSER AS a LEFT OUTER JOIN dbo.POSITION AS b ON a.POSSIE = b.POSSIE" 
+            self.sql        = f"SELECT a.EMPID AS EmployeeID, CASE (isnull(a.HECNAME, '')) WHEN '' THEN '' ELSE a.HECNAME END AS EmployeeName, CASE (isnull(a.HEENAME, '')) WHEN '' THEN '' ELSE a.HEENAME END AS EmployeeEnglishName, CASE (isnull(a.LOGIN_ID, '')) WHEN '' THEN '' ELSE a.LOGIN_ID END AS LoginID, a.CPNYID AS CompanyID, a.DEPT_NO AS DepartmentID, '' AS IdentityID, a.SEX, CASE (isnull(a.EMAIL, '')) WHEN '' THEN '' ELSE a.EMAIL END AS Email, CASE (isnull(a.MOBILNO, '')) WHEN '' THEN '' ELSE a.MOBILNO END AS Mobile, SUBSTRING(a.BIRTHDAY, 1, 4) + '/' + SUBSTRING(a.BIRTHDAY, 5, 2) + '/' + SUBSTRING(a.BIRTHDAY, 5, 2) AS Birthday, a.POSSIE AS JobTitleCode, CASE (isnull(b.POS_NAME, '')) WHEN '' THEN '' ELSE b.POS_NAME END AS JobTitleName, CASE (isnull(a.GRADE, '')) WHEN '' THEN '' ELSE a.GRADE END AS JobGrade, CASE (isnull(a.RANK, '')) WHEN '' THEN '' ELSE a.RANK END AS JobRank, '' AS JobCode, '' AS JobType, SUBSTRING(a.INADATE, 1, 4) + '/' + SUBSTRING(a.INADATE, 5, 2) + '/' + SUBSTRING(a.INADATE, 5, 2) AS EnterDate, CASE (isnull(a.PLACE, '')) WHEN '' THEN '' ELSE a.PLACE END AS WorkPlace, '' AS AreaCode, CASE (isnull(a.MOBILNO, '')) WHEN '' THEN '' ELSE a.MOBILNO END AS HomePhone, CASE (isnull(a.EXT, '')) WHEN '' THEN '' ELSE a.EXT END AS OfficePhone, CASE (isnull(a.COMADDR, '')) WHEN '' THEN '' ELSE a.COMADDR END AS Address, '' AS Synopsis FROM dbo.HRUSER AS a LEFT OUTER JOIN dbo.POSITION AS b ON a.POSSIE = b.POSSIE where a.STATE='A'" 
             self.curr_mssql.execute(self.sql)
             self.res        = self.curr_mssql.fetchall()
 
@@ -2623,7 +2623,7 @@ class web_cloud_dao:
                         # insert into MySQL
                         #
                         ######################
-                        sql  =  f"insert into hr_a(employee_id , employee_name , employee_eng_name , login_id , company_id , department_id , identity_id , sex , email , mobile , birthday , job_title_code , job_title_name , job_grade , job_rank , job_code , job_type , end_date , work_place , area_code , home_phone , office_phone , addresses , department_code , department_name) "
+                        sql  = f"insert into hr_a(employee_id , employee_name , employee_eng_name , login_id , company_id , department_id , identity_id , sex , email , mobile , birthday , job_title_code , job_title_name , job_grade , job_rank , job_code , job_type , end_date , work_place , area_code , home_phone , office_phone , addresses , department_code , department_name) "
                         sql += f"value('{val[0]}','{val[1]}','{val[2]}','{val[3]}','{val[4]}','{val[5]}','{val[6]}','{val[7]}','{val[8]}','{val[9]}','{val[10]}','{val[11]}','{val[12]}','{val[13]}','{val[14]}','{val[15]}','{val[16]}','{val[17]}','{val[18]}','{val[19]}','{val[20]}','{val[21]}','{val[22]}','{dep_val[0]}','{dep_val[1]}')"
                         self.curr.execute(sql)
                         self.conn.commit()
@@ -2645,12 +2645,69 @@ class web_cloud_dao:
             self.curr_mssql.close()
             self.conn_mssql.close()
 
+    ############################
+    # department_account_list
+    ############################
+    def department_account_list(self):
+        
+        self.__connect__()
+
+        try:
+            
+            sql  = f"SELECT department_name , department_code , department_id , count(*) FROM `hr_a` where login_id!='disabled' group by department_name" 
+
+            self.curr.execute(sql)
+            self.res = self.curr.fetchall()
+            
+            if self.res is not None:
+                return self.res
+            
+        except Exception as e:
+            logging.info('< Error > department_account_list : ' + str(e))
+
+        finally:
+            self.__disconnect__()
+    
+    ###########################
+    # department_list_detail
+    ###########################
+    def department_list_detail(self , d_code):
+        
+        self.__connect__()
+        
+        try:
+            ### connect mysql
+            connect_sql = f"select department_name , employee_id , employee_name , department_code from hr_a where department_code='{d_code}' and login_id!='disabled' order by department_name asc"
+            self.curr.execute(connect_sql)
+            self.res = self.curr.fetchall()
+
+            if self.res is not None:
+                return self.res
+            
+        except Exception as e:
+            logging.info('< Error > department_list_detail : ' + str(e))
+
+        finally:
+            self.__disconnect__()
+
     #############################
     # department_no_search_val
     #############################
     def department_no_search_val(self , employee_name):
+        
+        self.__connect__()
+        
         try:
-            
+            ### connect mysql
+            connect_sql = f"select department_name , department_code from hr_a where employee_name='{employee_name}'"
+            self.curr.execute(connect_sql)
+            self.res = self.curr.fetchall()
+
+            if self.res is not None:
+                return self.res
+
+            ### connect mssql
+            '''
             conn_str        = f"DRIVER={{SQL Server}};SERVER={otsuka_factory3['host']};DATABASE={otsuka_factory3['db']};UID={otsuka_factory3['user']};PWD={otsuka_factory3['pwd']}"  
             self.conn_mssql = pyodbc.connect(conn_str)
             self.curr_mssql = self.conn_mssql.cursor()
@@ -2661,17 +2718,16 @@ class web_cloud_dao:
             self.curr_mssql.commit()
             
             return self.res[0]
-        
+
             self.curr_mssql.close()
             self.conn_mssql.close()
+            '''
             
         except Exception as e:
             logging.info('< Error > department_no_search_vals : ' + str(e))
 
         finally:
-            pass
-            #self.curr_mssql.close()
-            #self.conn_mssql.close()
+            self.__disconnect__()
 
     #############################
     # load_work_time_data_list

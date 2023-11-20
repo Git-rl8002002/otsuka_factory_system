@@ -1010,6 +1010,42 @@ function load_check_member_list(){
         });
 }
 
+function department_list_detail(val){
+
+        var d_code = val;
+
+        $.ajax({
+                type:"POST",
+                url:"/department_list_detail",
+                data:{
+                        'd_code':d_code
+                },
+                datatype:"html",
+                        error:function(xhr , ajaxError , throwError){
+                        alert(xhr.status);
+                        alert(xhr.responseText);
+                        alert(throwError);
+                        alert(ajaxError);
+                },
+                success:function(res){
+                        
+                        $("#department_list_detail").show(1000).html(res);
+                        
+                        // scroll page bottom to page top
+                        goto_top();
+                        
+                        //location.reload(true);
+                },
+                beforeSend:function(){
+                        $('#status').html("員工姓名清單資料 ...").css({'color':'blue'});
+                },
+                complete:function(){
+                        $('#status').css({'color':'white'});
+                }
+        });
+        
+}
+
 function department_name_search(){
         var search_name = $('#department_name').val();
 
