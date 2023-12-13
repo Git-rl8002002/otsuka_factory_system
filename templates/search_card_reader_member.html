@@ -541,13 +541,19 @@
             -
             -------------------->
             <div id="main_content" class="col-md-2 my-1">
+                
+                <ul class="list-group">
+                    <i class="list-group-item list-group-item-action active"><i class="bi bi-chat-left-text"></i> 刷卡紀錄查詢</i>
+                        <li class="list-group-item list-group-item-action" ><i class="bi bi-arrow-right-short"></i></li>
+                </ul>
+                
+                <br>
 
                 <ul class="list-group">
                     <i class="list-group-item list-group-item-action active"><i class="bi bi-chat-left-text"></i> 各部門刷卡紀錄</i>
                     {% for val in card_reader_res %}
                         <li class="list-group-item list-group-item-action" id="{{ val[0] }}" onclick="load_card_reader_list(id)"><i class="bi bi-arrow-right-short"></i> {{ val[0] }} </li>
                     {% endfor %}
-
                 </ul>
             </div>
 
